@@ -6,4 +6,7 @@
   <Folder Name="/servicies/Catalog/">
     <Project Path="Servicies/Catalog/CatalogAPI/CatalogAPI.csproj" Id="d8ded279-e0f0-483c-bf50-6b199a333ea9" />
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
 </Solution>

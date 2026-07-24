@@ -8,6 +8,12 @@ builder.Services.AddMediatR(config =>
     //Va leer todos los handlers automaticamente
     config.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
+//inyeccion de dependencias de Marten
+builder.Services.AddMarten(opts =>
+{
+    //declarar la conexion como una cadena de texto
+    opts.Connection(builder.Configuration.GetConnectionString("Database")!);
+}).UseLightweightSessions();
 var app = builder.Build();
 
 //configurar el HTTP

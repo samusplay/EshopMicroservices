@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.CQRS;
-using CatalogAPI.Models;
-
+﻿
 
 namespace CatalogAPI.Products.CreateProduct;
 
@@ -18,7 +16,8 @@ public record CreateProductComand(
 public record CreateProductResult(Guid Id);
 
 //hacemos enfasis de que hanlder del comand le pasamos el comand y el result
-internal class CreateProductComandHandler 
+//Idocument es la absatracion inversion de depenecias solo  es la abstraccion
+internal class CreateProductComandHandler(IDocumentSession session) 
     : ICommandHandler<CreateProductComand, CreateProductResult>
 
 {//Implementamos los metodos de Irequest que son de la libreria 
@@ -37,9 +36,14 @@ internal class CreateProductComandHandler
             Price=command.Price,
         };
         //Guardar En la Base de datos
+        //usamos el objeto de session.store lo tenemos listo para guardar en la DB 
+        session.Store(product);
+        //el token de cancelacion es para evitar requets incompletos
+        //esperamos que se guarden los datos
+        await session.SaveChangesAsync(cancellationToken);
 
-        //devolvemos el resultado
-        return  new CreateProductResult(Guid.NewGuid());
+        //devolvemos el resultado Con su id generado en la db
+        return  new CreateProductResult(product.Id);
     }
 }
 
